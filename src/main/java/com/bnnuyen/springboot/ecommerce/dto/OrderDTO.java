@@ -16,9 +16,9 @@ public class OrderDTO {
     private String status;
     private Date dateCreated;
     private Date lastUpdated;
-    private Customer customer;
-    private Address address;
-    private Set<OrderItem> orderItems;  //
+    private CustomerDTO customer;
+    private AddressDTO address;
+    private Set<OrderItemDTO> orderItems;  
 
     public Long getId() {
         return id;
@@ -76,28 +76,27 @@ public class OrderDTO {
         this.lastUpdated = lastUpdated;
     }
 
-    public Set<OrderItem> getOrderItems() {
-        return orderItems;
-    }
-
-    public void setOrderItems(Set<OrderItem> orderItems) {
-        this.orderItems = orderItems;
-    }
-
-    public Customer getCustomer() {
+    public CustomerDTO getCustomer() {
         return customer;
     }
 
-    public void setCustomer(Customer customer) {
+    public void setCustomer(CustomerDTO customer) {
         this.customer = customer;
     }
 
-    public Address getAddress() {
+    public Set<OrderItemDTO> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(Set<OrderItemDTO> orderItems) {
+        this.orderItems = orderItems;
+    }
+
+    public AddressDTO getAddress() {
         return address;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(AddressDTO address) {
         this.address = address;
     }
-
 }

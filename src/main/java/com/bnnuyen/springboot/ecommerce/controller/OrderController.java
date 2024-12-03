@@ -1,35 +1,50 @@
 package com.bnnuyen.springboot.ecommerce.controller;
 
 import com.bnnuyen.springboot.ecommerce.dto.OrderDTO;
-import com.bnnuyen.springboot.ecommerce.entity.Order;
-import com.bnnuyen.springboot.ecommerce.mapper.OrderMapper;
+import com.bnnuyen.springboot.ecommerce.dto.UpdateStatusRequest;
 import com.bnnuyen.springboot.ecommerce.service.OrderService;
+
+import jakarta.websocket.server.PathParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping("/api/orders")
+@CrossOrigin("*")
 public class OrderController {
 
     private final OrderService orderService;
-    private final OrderMapper orderMapper;
 
     @Autowired
-    public OrderController(OrderService orderService, OrderMapper orderMapper) {
+    public OrderController(OrderService orderService) {
         this.orderService = orderService;
-        this.orderMapper = orderMapper;
     }
 
     @GetMapping
     public List<OrderDTO> getAllOrders() {
-        List<Order> orders = orderService.getAllOrders();
-        return orders.stream()
-                .map(orderMapper::toOrderDTO)
-                .collect(Collectors.toList());
+        return orderService.getAllOrders();
     }
+
+    @GetMapping("/{id}")
+    public OrderDTO getOrderById(@PathVariable Long id) {
+        return orderService.getOrderById(id);
+    }
+
+    @PostMapping("/{id}/status")
+    public void postMethodName(@RequestBody UpdateStatusRequest status, @PathVariable Long id) {
+        orderService.updateStatus(id, status.getStatus());
+    }
+    
 }

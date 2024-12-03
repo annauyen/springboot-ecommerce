@@ -8,11 +8,9 @@ import com.bnnuyen.springboot.ecommerce.entity.Order;
 import com.bnnuyen.springboot.ecommerce.entity.OrderItem;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 

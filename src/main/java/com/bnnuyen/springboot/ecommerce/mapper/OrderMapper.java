@@ -1,12 +1,17 @@
 package com.bnnuyen.springboot.ecommerce.mapper;
 
-import com.bnnuyen.springboot.ecommerce.dto.OrderDTO;
-import com.bnnuyen.springboot.ecommerce.entity.Order;
-import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-@Service
+import com.bnnuyen.springboot.ecommerce.dto.AddressDTO;
+import com.bnnuyen.springboot.ecommerce.dto.CustomerDTO;
+import com.bnnuyen.springboot.ecommerce.dto.OrderDTO;
+import com.bnnuyen.springboot.ecommerce.dto.OrderItemDTO;
+import com.bnnuyen.springboot.ecommerce.entity.Order;
+
 public class OrderMapper {
-    public OrderDTO toOrderDTO(Order order) {
+    public static OrderDTO toOrderDTO(Order order) {
         if (order == null) {
             return null;
         }
@@ -20,12 +25,19 @@ public class OrderMapper {
         orderDTO.setDateCreated(order.getDateCreated());
         orderDTO.setLastUpdated(order.getLastUpdated());
 
+        Set<OrderItemDTO> orderItemDTOs = order.getOrderItems().stream().map(OrderItemMapper::toOrderItemDTO).collect(Collectors.toSet());
+        orderDTO.setOrderItems(orderItemDTOs);
 
-        orderDTO.setOrderItems(order.getOrderItems());
+        CustomerDTO customer = new CustomerDTO();
+        customer.setFullName(order.getCustomer().getFullName());
+        customer.setEmail(order.getCustomer().getEmail());
+        customer.setId(order.getCustomer().getId());
 
+        orderDTO.setCustomer(customer);
 
-        orderDTO.setCustomer(order.getCustomer());
-        orderDTO.setAddress(order.getAddress());
+        AddressDTO addressDTO = new AddressDTO();
+        addressDTO.setAddress(order.getAddress().getAddress());
+        orderDTO.setAddress(addressDTO);
 
         return orderDTO;
     }
