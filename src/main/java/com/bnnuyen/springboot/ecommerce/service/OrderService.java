@@ -1,7 +1,9 @@
 package com.bnnuyen.springboot.ecommerce.service;
 
 import com.bnnuyen.springboot.ecommerce.dao.OrderRepository;
+import com.bnnuyen.springboot.ecommerce.dao.ProductRepository;
 import com.bnnuyen.springboot.ecommerce.dto.OrderDTO;
+import com.bnnuyen.springboot.ecommerce.dto.OrderItemDTO;
 import com.bnnuyen.springboot.ecommerce.entity.Order;
 import com.bnnuyen.springboot.ecommerce.mapper.OrderMapper;
 
@@ -14,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,15 +24,42 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
 
+    private final ProductRepository productRepository;
+
     @Autowired
-    public OrderService(OrderRepository orderRepository) {
+    public OrderService(OrderRepository orderRepository, ProductRepository productRepository) {
         this.orderRepository = orderRepository;
+        this.productRepository = productRepository;
     }
 
-    public List<OrderDTO> getAllOrders() {
-        return orderRepository.findAll().stream()
-                .map(OrderMapper::toOrderDTO)
-                .collect(Collectors.toList());
+    public List<OrderDTO> getAllOrders(String email) {
+        return orderRepository.findAll().stream().filter(data -> {
+                if (email == null || email.isEmpty()) {
+                    return true;
+                }
+                
+                return data.getCustomer().getEmail().equals(email);
+            })
+            .map(OrderMapper::toOrderDTO)
+            .map(this::setProductName)
+            .collect(Collectors.toList());
+    }
+
+    private OrderDTO setProductName(OrderDTO orderDTO) {
+        Set<OrderItemDTO> orderItems = orderDTO.getOrderItems();
+        if (orderItems != null &&  !orderItems.isEmpty()) {
+            Set<OrderItemDTO> orderItemsUpdated = orderItems.stream().map(item -> {
+                this.productRepository.findById(item.getProductId())
+                    .ifPresent(data -> {
+                        item.setProductName(data.getName());
+                    });
+                return item;
+            }).collect(Collectors.toSet());
+            orderDTO.setOrderItems(orderItemsUpdated);
+            
+        }
+
+        return orderDTO;
     }
 
     public OrderDTO getOrderById(Long id) {

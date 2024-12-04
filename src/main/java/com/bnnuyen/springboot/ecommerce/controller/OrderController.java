@@ -33,8 +33,8 @@ public class OrderController {
     }
 
     @GetMapping
-    public List<OrderDTO> getAllOrders() {
-        return orderService.getAllOrders();
+    public List<OrderDTO> getAllOrders(@RequestParam(name = "email", required = false) String email) {
+        return orderService.getAllOrders(email);
     }
 
     @GetMapping("/{id}")

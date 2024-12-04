@@ -1,5 +1,8 @@
 package com.bnnuyen.springboot.ecommerce.mapper;
 
+import org.springframework.stereotype.Component;
+
+import com.bnnuyen.springboot.ecommerce.dao.ProductRepository;
 import com.bnnuyen.springboot.ecommerce.dto.OrderItemDTO;
 import com.bnnuyen.springboot.ecommerce.entity.OrderItem;
 

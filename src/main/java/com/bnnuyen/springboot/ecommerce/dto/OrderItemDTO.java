@@ -2,11 +2,6 @@ package com.bnnuyen.springboot.ecommerce.dto;
 
 import java.math.BigDecimal;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-
 public class OrderItemDTO {
 
     private Long id;
@@ -18,6 +13,8 @@ public class OrderItemDTO {
     private int quantity;
 
     private Long productId;
+
+    private String productName;
 
     public Long getId() {
         return id;
@@ -58,4 +55,13 @@ public class OrderItemDTO {
     public void setProductId(Long productId) {
         this.productId = productId;
     }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
 }
